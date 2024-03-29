@@ -326,7 +326,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Lv.1
+  m_Text: Lv.1000
 --- !u!222 &227089290
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -405,7 +405,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "!!!\uAC15\uD654!!!\n0G"
+  m_Text: "!!!\uAC15\uD654!!!\n100000000G"
 --- !u!222 &247789284
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -781,7 +781,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\uD310\uB9E4\n0G"
+  m_Text: "\uD310\uB9E4\n100000000G"
 --- !u!222 &947189637
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1007,7 +1007,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\uC18C\uC9C0\uAE08: 0"
+  m_Text: "\uC18C\uC9C0\uAE08: 999999999999999999999999999999999"
 --- !u!222 &1148437107
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1286,11 +1286,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e334122462a4fc4c8442b1bdb9ebd70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerMoney: 1000
-  level: 1
-  upgradePrice: 100
-  upgradePercent: 100
-  sellPrice: 1
   PlayerMoneyText: {fileID: 1148437106}
   LevelText: {fileID: 227089289}
   UpgradePercentText: {fileID: 2094802713}
@@ -1394,7 +1389,7 @@ CanvasRenderer:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 2006418834}
   - {fileID: 519420032}
   - {fileID: 956588565}
-  - {fileID: 2006418834}
   - {fileID: 1214915117}
