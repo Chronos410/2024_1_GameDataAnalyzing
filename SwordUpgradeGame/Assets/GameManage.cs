@@ -98,9 +98,29 @@ public class GameManage : MonoBehaviour
     public void OnClickSell()       //검 판매 버튼 클릭
     {
         //!!!검 판매 로그 작성
+        WriteSaleData();
         playerMoney = playerMoney + isellPrice;
         ResetWeapon();
     }
+
+
+    // 추가된 함수: 무기 판매 데이터를 CSV 파일에 저장
+    void WriteSaleData()
+    {
+        string saleData = string.Format("{0},{1}", level, isellPrice);
+        WriteToCSV("SaleData.csv", saleData);
+    }
+
+    // 추가된 함수: CSV 파일에 데이터를 쓰는 함수
+    void WriteToCSV(string filePath, string data)
+    {
+        using (StreamWriter sw = File.AppendText(filePath))
+        {
+            sw.WriteLine(data);
+        }
+    }
+
+
 
     /// <summary>
     /// 게임 종료 버튼을 클릭 시 실행되는 함수
