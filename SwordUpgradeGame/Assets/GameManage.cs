@@ -83,6 +83,7 @@ public class GameManage : MonoBehaviour
             else    //강화 실패
             {
                 //!!!강화 실패 로그 작성
+                WriteSaleData();
                 ResetWeapon();
             }
         }
@@ -98,7 +99,7 @@ public class GameManage : MonoBehaviour
     public void OnClickSell()       //검 판매 버튼 클릭
     {
         //!!!검 판매 로그 작성
-        WriteSaleData();
+        
         playerMoney = playerMoney + isellPrice;
         ResetWeapon();
     }
@@ -128,7 +129,7 @@ public class GameManage : MonoBehaviour
     public void OnClickExit()       //게임 종료 버튼 클릭
     {
         //!!!게임 종료 로그 작성
-        //!!!csv 파일 저장?
+        //!!!csv 파일 저장
 
         Debug.Log("Exit");
         Application.Quit();         //게임 종료됨
