@@ -43,6 +43,8 @@ public class GameManage : MonoBehaviour
 
     public Text PlayerMoneyText, LevelText, UpgradePercentText, UpgradeBtnText, SellBtnText;    //화면에 보이는 UI를 수정할 수 있게 연결함
 
+    static DateTime nowTime = DateTime.Now;
+    string filepath = "";
 
     /// <summary>
     /// 무기 강화를 1레벨로 초기화 하는 함수
@@ -55,14 +57,16 @@ public class GameManage : MonoBehaviour
         sellPrice = 100;
     }
 
-    void Start()
+    // 추가된 함수: 로그를 남기는 함수
+    void Logger(string btn, string act)
     {
-        //!!!csv파일 생성하는 문구 넣어야됨(맨 윗 라인)
-        //!!!게임 시작 로그
-        playerMoney = 1000;
-        ResetWeapon();
+        nowTime = DateTime.Now;
+        using (StreamWriter sw = new StreamWriter(filepath, true, System.Text.Encoding.GetEncoding("utf-8")))
+        {
+            sw.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7}", nowTime.ToString("yyyy/MM/dd HH:mm:ss:ff"), btn, act, level, playerMoney, iupgradePrice, isellPrice, iupgradePercent);
+        }
     }
-
+    
     /// <summary>
     /// 강화 버튼을 클릭 시 실행되는 함수
     /// </summary>
@@ -74,22 +78,24 @@ public class GameManage : MonoBehaviour
             if (UnityEngine.Random.Range(0, 100) <= iupgradePercent)        //강화 성공 확률보다 Random (0~100) 값이 낮거나 같은 경우 강화 성공
             {
                 //!!!강화 성공 로그 작성
+                Logger("강화", "강화 성공");
                 upgradePercent = upgradePercent * upgradePercentChange;
                 upgradePrice = upgradePrice * upgradePriceChange;
                 sellPrice = sellPrice * sellChange;
                 level++;
-                
+
             }
             else    //강화 실패
             {
                 //!!!강화 실패 로그 작성
-                WriteSaleData();
+                Logger("강화", "강화 실패");
                 ResetWeapon();
             }
         }
         else    //소지금이 강화비용보다 적은 경우
         {
             //!!!소지금 부족 로그 작성
+            Logger("강화", "소지금 부족");
         }
     }
 
@@ -99,29 +105,10 @@ public class GameManage : MonoBehaviour
     public void OnClickSell()       //검 판매 버튼 클릭
     {
         //!!!검 판매 로그 작성
-        
+        Logger("판매", "판매");
         playerMoney = playerMoney + isellPrice;
         ResetWeapon();
     }
-
-
-    // 추가된 함수: 무기 판매 데이터를 CSV 파일에 저장
-    void WriteSaleData()
-    {
-        string saleData = string.Format("{0},{1}", level, isellPrice);
-        WriteToCSV("SaleData.csv", saleData);
-    }
-
-    // 추가된 함수: CSV 파일에 데이터를 쓰는 함수
-    void WriteToCSV(string filePath, string data)
-    {
-        using (StreamWriter sw = File.AppendText(filePath))
-        {
-            sw.WriteLine(data);
-        }
-    }
-
-
 
     /// <summary>
     /// 게임 종료 버튼을 클릭 시 실행되는 함수
@@ -129,13 +116,30 @@ public class GameManage : MonoBehaviour
     public void OnClickExit()       //게임 종료 버튼 클릭
     {
         //!!!게임 종료 로그 작성
-        //!!!csv 파일 저장
+        Logger("종료", "게임 종료");
 
         Debug.Log("Exit");
         Application.Quit();         //게임 종료됨
     }
 
-    
+
+    public void Start()
+    {
+        filepath = "PlayLog\\Log_" + nowTime.ToString("yyyy_MM_dd_HH_mm_ss_ff") + ".csv";
+
+        //!!!csv파일 생성하는 문구 넣어야됨(맨 윗 라인)
+        using (StreamWriter sw = new StreamWriter(filepath, true, System.Text.Encoding.GetEncoding("utf-8")))
+        {
+            sw.WriteLine("현재 시간,행동,결과,레벨,소지금,강화비용,판매가격,강화 성공률");
+        }
+
+        playerMoney = 1000;
+        ResetWeapon();
+
+        //!!!게임 시작 로그
+        Logger("게임 실행", "게임 시작");
+    }
+
 
     void Update()
     {
@@ -148,7 +152,7 @@ public class GameManage : MonoBehaviour
         PlayerMoneyText.text = "소지금: " + playerMoney.ToString() + "G";
         LevelText.text = "Lv." + level.ToString();
         UpgradePercentText.text = iupgradePercent.ToString() + "%";
-        UpgradeBtnText.text = "☆강화☆\n"+iupgradePrice.ToString()+"G";
-        SellBtnText.text = "판매\n"+isellPrice.ToString()+"G";
+        UpgradeBtnText.text = "☆강화☆\n" + iupgradePrice.ToString() + "G";
+        SellBtnText.text = "판매\n" + isellPrice.ToString() + "G";
     }
 }
