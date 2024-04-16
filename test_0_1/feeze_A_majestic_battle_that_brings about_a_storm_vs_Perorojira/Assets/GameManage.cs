@@ -63,11 +63,14 @@ public class GameManage : MonoBehaviour
 
     public GameObject ScoreBoard;
     public RawImage LifeFirst, LifeSecond, LifeThird;
-    public Text ExpText, AttackCountText, BossLifeText, AttackButtonText,  UpgradePercentButtonText, UpgradeDamageButtonText, ScoreBoardText;    //화면에 보이는 UI를 수정할 수 있게 연결함
+    public Text ExpText, AttackCountText, BossLifeText, AttackButtonText,  UpgradePercentButtonText, UpgradeDamageButtonText, ScoreBoardText, DamageText, PercentText;    //화면에 보이는 UI를 수정할 수 있게 연결함
 
     static DateTime nowTime = DateTime.Now;
     string filepath = "";
     string scoreboardsay = "";
+
+
+
 
     /// <summary>
     /// 게임을 초기화 하는 함수
@@ -139,7 +142,9 @@ public class GameManage : MonoBehaviour
             exp += 30;
             totalexp += 30;
             attackCount++;
-            
+      
+
+
         }
         else    //공격 실패
         {
@@ -267,7 +272,7 @@ public class GameManage : MonoBehaviour
         else
         {
             isPlayerAlive = true;
-            AttackButtonText.text = "☆공격☆\n성공확률" + iattackPercent.ToString() + "%\n공격력" + attackDamage.ToString();
+            AttackButtonText.text = "☆공격☆";
         }
         
 
@@ -275,6 +280,8 @@ public class GameManage : MonoBehaviour
         UpgradePercentButtonText.text = "정확도 강화!\n" + attackPercentUpgradeCost.ToString() + "exp\nLV."+ attackPercentLevel.ToString();
 
         ScoreBoardText.text = $"\n\n☆{scoreboardsay}☆\n\n\nSCORE : {score}\n\nTOTAL DAMAGE : {300 - bossLife}\n\nATTACK COUNT : {attackCount}";
+        DamageText.text = ": "+attackDamage.ToString();
+        PercentText.text = ": "+iattackPercent.ToString() + "%";
 
     }
 }
