@@ -9,6 +9,10 @@ using UnityEngine.UI;
 public class GameManage : MonoBehaviour
 {
     
+    float timer = 0f;
+    float delayInSeconds = 0.1f;
+    
+
     //계수
     /// <summary> 공격 성공 확률 감소 계수 (곱연산) </summary>
     double attackPercentChange = 0.91;
@@ -61,15 +65,20 @@ public class GameManage : MonoBehaviour
     /// <summary> 플레이어 체력이 1 이상일때 true </summary>
     bool isPlayerAlive = true;
 
-    public GameObject ScoreBoard;
+    public GameObject ScoreBoard, BossImage, HitEffect;
     public RawImage LifeFirst, LifeSecond, LifeThird;
-    public Text ExpText, AttackCountText, BossLifeText, AttackButtonText,  UpgradePercentButtonText, UpgradeDamageButtonText, ScoreBoardText, DamageText, PercentText;    //화면에 보이는 UI를 수정할 수 있게 연결함
-
+    public Text ExpText, AttackCountText, BossLifeText, AttackButtonText,  UpgradePercentButtonText, UpgradeDamageButtonText, ScoreBoardText, DamageText, PercentText, HitDamegeNumber;    //화면에 보이는 UI를 수정할 수 있게 연결함
+    
     static DateTime nowTime = DateTime.Now;
     string filepath = "";
     string scoreboardsay = "";
 
+    bool isBossHit = false;
+    bool isHitEfectOn = false;
 
+    float newX = 0;
+    float newY = 0; 
+  
 
 
     /// <summary>
@@ -113,6 +122,7 @@ public class GameManage : MonoBehaviour
     }
 
 
+
     // 추가된 함수: 로그를 남기는 함수
     void Logger(string btn, string act)
     {
@@ -130,19 +140,27 @@ public class GameManage : MonoBehaviour
     {
         if (!isPlayerAlive)  //다시하기
         {
+           
+
             Logger("공격", "다시하기");
+                
             GameReset();
         }
         else if (UnityEngine.Random.Range(0, 100) <= iattackPercent)    //공격 성공
         {
             Logger("공격", "성공");
+            
+            isBossHit = true;
+            
+
             bossLife -= attackDamage;
             score = attackDamage + exp; 
             attackPercent *= attackPercentChange;
             exp += 30;
             totalexp += 30;
             attackCount++;
-      
+            
+
 
 
         }
@@ -170,6 +188,7 @@ public class GameManage : MonoBehaviour
     {
         if (exp >= attackDamageUpgradeCost) //경험치 충분
         {
+
             Logger("공격력 강화", "성공");
             attackDamage += attackDamageUpgradeValue;
             exp -= attackDamageUpgradeCost;
@@ -205,6 +224,10 @@ public class GameManage : MonoBehaviour
         }
     }
 
+
+    
+
+
     /// <summary>
     /// 게임 종료 버튼을 클릭 시 실행되는 함수
     /// </summary>
@@ -218,6 +241,7 @@ public class GameManage : MonoBehaviour
 
     public void Start()
     {
+        HitEffect.SetActive(false);
         filepath = "PlayLog\\Log_" + nowTime.ToString("yyyy_MM_dd_HH_mm_ss_ff") + ".csv";
         nowTime = DateTime.Now;
         using (StreamWriter sw = new StreamWriter(filepath, true, System.Text.Encoding.GetEncoding("utf-8")))
@@ -228,10 +252,40 @@ public class GameManage : MonoBehaviour
         GameReset();
     }
 
+    
 
     void Update()
     {
-        
+
+
+        if (isBossHit)
+        {
+            timer += Time.deltaTime;
+            BossImage.SetActive(false);
+            if (isHitEfectOn)
+            {
+                newX = UnityEngine.Random.Range(-300f,450f);
+                newY = UnityEngine.Random.Range(300,-150f);
+                isHitEfectOn = false;
+
+            }
+            HitEffect.SetActive(true);
+            RectTransform rectTransform = HitEffect.GetComponent<RectTransform>(); // HitEffect의 RectTransform 컴포넌트 가져오기
+            rectTransform.anchoredPosition = new Vector2(newX, newY);
+
+            if (timer >= delayInSeconds)
+            {
+                BossImage.SetActive(true);
+                isBossHit = false;
+                HitEffect.SetActive(false);
+                timer = 0;
+                isHitEfectOn = true;
+
+            }
+        }
+       
+
+
         switch (life)
         {
             case 0:
@@ -276,12 +330,13 @@ public class GameManage : MonoBehaviour
         }
         
 
-        UpgradeDamageButtonText.text = "공격력 강화!\n" + attackDamageUpgradeCost.ToString() + "exp\nLV." + attackDamageLevel.ToString();
-        UpgradePercentButtonText.text = "정확도 강화!\n" + attackPercentUpgradeCost.ToString() + "exp\nLV."+ attackPercentLevel.ToString();
+        UpgradeDamageButtonText.text = "공격력 강화!\n" + attackDamageUpgradeCost.ToString() + "exp\nLV." + attackDamageLevel.ToString()+"\n"+ attackDamageUpgradeValue.ToString()+"증가";
+        UpgradePercentButtonText.text = "정확도 강화!\n" + attackPercentUpgradeCost.ToString() + "exp\nLV."+ attackPercentLevel.ToString() + "\n" + attackPercentUpgradeValue.ToString() + "%증가"; ;
 
         ScoreBoardText.text = $"\n\n☆{scoreboardsay}☆\n\n\nSCORE : {score}\n\nTOTAL DAMAGE : {300 - bossLife}\n\nATTACK COUNT : {attackCount}";
         DamageText.text = ": "+attackDamage.ToString();
         PercentText.text = ": "+iattackPercent.ToString() + "%";
+        HitDamegeNumber.text = "-"+ attackDamage.ToString();
 
     }
 }
