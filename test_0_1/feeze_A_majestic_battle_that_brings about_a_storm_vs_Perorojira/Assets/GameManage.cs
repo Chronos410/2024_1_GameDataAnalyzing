@@ -11,6 +11,7 @@ public class GameManage : MonoBehaviour
     
     float timer = 0f;
     float delayInSeconds = 0.1f;
+    float ShowDamageTimer = 0.3f;
     
 
     //°è¼ö
@@ -264,8 +265,8 @@ public class GameManage : MonoBehaviour
             BossImage.SetActive(false);
             if (isHitEfectOn)
             {
-                newX = UnityEngine.Random.Range(-300f,450f);
-                newY = UnityEngine.Random.Range(300,-150f);
+                newX = UnityEngine.Random.Range(-300f, 450f);
+                newY = UnityEngine.Random.Range(300, -150f);
                 isHitEfectOn = false;
 
             }
@@ -283,7 +284,7 @@ public class GameManage : MonoBehaviour
 
             }
         }
-       
+
 
 
         switch (life)
