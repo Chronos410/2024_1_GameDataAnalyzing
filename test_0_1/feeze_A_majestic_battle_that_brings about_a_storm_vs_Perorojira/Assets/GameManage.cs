@@ -13,63 +13,63 @@ public class GameManage : MonoBehaviour
     float timer = 0f;
     float delayInSeconds = 0.1f;
 
-    //°è¼ö
-    /// <summary> °ø°İ ¼º°ø È®·ü °¨¼Ò °è¼ö (°ö¿¬»ê) </summary>
+    //ê³„ìˆ˜
+    /// <summary> ê³µê²© ì„±ê³µ í™•ë¥  ê°ì†Œ ê³„ìˆ˜ (ê³±ì—°ì‚°) </summary>
     double attackPercentChange = 0.91;
 
-    //±âº» ½ºÅÈ
-    /// <summary> ÇÃ·¹ÀÌ¾î Ã¼·Â </summary>
+    //ê¸°ë³¸ ìŠ¤íƒ¯
+    /// <summary> í”Œë ˆì´ì–´ ì²´ë ¥ </summary>
     int life = 3;
-    /// <summary> ÇöÀç ¼ÒÁöÇÑ °æÇèÄ¡ </summary>
+    /// <summary> í˜„ì¬ ì†Œì§€í•œ ê²½í—˜ì¹˜ </summary>
     int exp = 0;
-    /// <summary> ´©Àû È¹µæÇÑ °æÇèÄ¡ </summary>
+    /// <summary> ëˆ„ì  íšë“í•œ ê²½í—˜ì¹˜ </summary>
     int totalexp = 0;
 
-    /// <summary> º¸½º Ã¼·Â </summary>
+    /// <summary> ë³´ìŠ¤ ì²´ë ¥ </summary>
     int bossLife = 0;
   
-    /// <summary> °ø°İ·Â </summary>
+    /// <summary> ê³µê²©ë ¥ </summary>
     int attackDamage = 0;
-    /// <summary> °ø°İ ¼º°ø È®·ü </summary>
+    /// <summary> ê³µê²© ì„±ê³µ í™•ë¥  </summary>
     double attackPercent = 0;
-    /// <summary> °ø°İ ¼º°ø È®·üÀ» intÇüÀ¸·Î º¯È¯ÇÑ °ª </summary>
+    /// <summary> ê³µê²© ì„±ê³µ í™•ë¥ ì„ intí˜•ìœ¼ë¡œ ë³€í™˜í•œ ê°’ </summary>
     int iattackPercent = 0;
 
 
-    //Á¡¼ö
-    /// <summary> °ø°İ ¼º°ø È½¼ö </summary>
+    //ì ìˆ˜
+    /// <summary> ê³µê²© ì„±ê³µ íšŸìˆ˜ </summary>
     int attackCount = 0;
-    /// <summary> Á¡¼ö
-    /// [°è»ê½Ä]
-    /// +°ø°İ·Â ¸¸Å­ (¸Å °ø°İ ¼º°ø¸¶´Ù)
-    /// +¼ÒÁö °æÇèÄ¡ ¸¸Å­ (¸Å °ø°İ ¼º°ø¸¶´Ù)
-    /// +3000 (°ÔÀÓ Å¬¸®¾î½Ã)
+    /// <summary> ì ìˆ˜
+    /// [ê³„ì‚°ì‹]
+    /// +ê³µê²©ë ¥ ë§Œí¼ (ë§¤ ê³µê²© ì„±ê³µë§ˆë‹¤)
+    /// +ì†Œì§€ ê²½í—˜ì¹˜ ë§Œí¼ (ë§¤ ê³µê²© ì„±ê³µë§ˆë‹¤)
+    /// +3000 (ê²Œì„ í´ë¦¬ì–´ì‹œ)
     /// </summary>
     int score = 0;
 
 
-    //°­È­ °ü·Ã
-    /// <summary> °ø°İ·Â °­È­¿¡ ¼Ò¸ğÇÏ´Â °æÇèÄ¡ ºñ¿ë (ÇÕ¿¬»ê) </summary>
+    //ê°•í™” ê´€ë ¨
+    /// <summary> ê³µê²©ë ¥ ê°•í™”ì— ì†Œëª¨í•˜ëŠ” ê²½í—˜ì¹˜ ë¹„ìš© (í•©ì—°ì‚°) </summary>
     int attackDamageUpgradeCost = 0;
-    /// <summary> °ø°İ·Â °­È­½Ã Áõ°¡ÇÏ´Â °ø°İ·Â (ÇÕ¿¬»ê) </summary>
+    /// <summary> ê³µê²©ë ¥ ê°•í™”ì‹œ ì¦ê°€í•˜ëŠ” ê³µê²©ë ¥ (í•©ì—°ì‚°) </summary>
     int attackDamageUpgradeValue = 0;
-    /// <summary> ÇöÀç °ø°İ·Â °­È­ ·¹º§ </summary>
+    /// <summary> í˜„ì¬ ê³µê²©ë ¥ ê°•í™” ë ˆë²¨ </summary>
     int attackDamageLevel = 0;
 
-    /// <summary> Á¤È®µµ °­È­¿¡ ¼Ò¸ğÇÏ´Â °æÇèÄ¡ ºñ¿ë (ÇÕ¿¬»ê) </summary>
+    /// <summary> ì •í™•ë„ ê°•í™”ì— ì†Œëª¨í•˜ëŠ” ê²½í—˜ì¹˜ ë¹„ìš© (í•©ì—°ì‚°) </summary>
     int attackPercentUpgradeCost = 0;
-    /// <summary> Á¤È®µµ °­È­½Ã Áõ°¡ÇÏ´Â °ø°İ ¼º°ø È®·ü (ÇÕ¿¬»ê) </summary>
+    /// <summary> ì •í™•ë„ ê°•í™”ì‹œ ì¦ê°€í•˜ëŠ” ê³µê²© ì„±ê³µ í™•ë¥  (í•©ì—°ì‚°) </summary>
     int attackPercentUpgradeValue = 0;
-    /// <summary> ÇöÀç Á¤È®µµ °­È­ ·¹º§ </summary>
+    /// <summary> í˜„ì¬ ì •í™•ë„ ê°•í™” ë ˆë²¨ </summary>
     int attackPercentLevel = 0;
-    /// <summary> ÇÃ·¹ÀÌ¾î Ã¼·ÂÀÌ 1 ÀÌ»óÀÏ¶§ true </summary>
+    /// <summary> í”Œë ˆì´ì–´ ì²´ë ¥ì´ 1 ì´ìƒì¼ë•Œ true </summary>
     bool isPlayerAlive = true;
 
 
     
     public GameObject ScoreBoard, BossImage, HitEffect, Null_Image, Nickname_Input, Nickname_Button;
     public RawImage LifeFirst, LifeSecond, LifeThird;
-    public Text ExpText, AttackCountText, BossLifeText, AttackButtonText,  UpgradePercentButtonText, UpgradeDamageButtonText, ScoreBoardText, DamageText, PercentText, HitDamegeNumber, Nickname_Input_Text, Nickname_UI_Text;    //È­¸é¿¡ º¸ÀÌ´Â UI¸¦ ¼öÁ¤ÇÒ ¼ö ÀÖ°Ô ¿¬°áÇÔ
+    public Text ExpText, AttackCountText, BossLifeText, AttackButtonText,  UpgradePercentButtonText, UpgradeDamageButtonText, ScoreBoardText, DamageText, PercentText, HitDamegeNumber, Nickname_Input_Text, Nickname_UI_Text;    //í™”ë©´ì— ë³´ì´ëŠ” UIë¥¼ ìˆ˜ì •í•  ìˆ˜ ìˆê²Œ ì—°ê²°í•¨
     
     static DateTime nowTime = DateTime.Now;
     string filepath = "";
@@ -81,14 +81,15 @@ public class GameManage : MonoBehaviour
     float newX = 0;
     float newY = 0;
 
-    ///À¥ ¹èÆ÷ URL
+    ///ì›¹ ë°°í¬ URL
     const string WebURL = "https://script.google.com/macros/s/AKfycbzMZTQQbQ6pZY0uwDmgohLvMmC1XnO7POrWzFG9vWQEEJJY3AOCKoxHvKRQUICcqro0/exec";
-    //´Ğ³×ÀÓ
+
+    //ë‹‰ë„¤ì„
     string nickname;
     int lognum;
 
     /// <summary>
-    /// °ÔÀÓÀ» ÃÊ±âÈ­ ÇÏ´Â ÇÔ¼ö
+    /// ê²Œì„ì„ ì´ˆê¸°í™” í•˜ëŠ” í•¨ìˆ˜
     /// </summary>
     void GameReset()
     {
@@ -117,7 +118,7 @@ public class GameManage : MonoBehaviour
     void GameClear()
     {
         score = score + 3000;
-        scoreboardsay = "¡Ú¡ÙGAME CLEAR¡Ù¡Ú";
+        scoreboardsay = "â˜…â˜†GAME CLEARâ˜†â˜…";
         ScoreBoard.SetActive(true);
     }
     void GameOver()
@@ -126,9 +127,11 @@ public class GameManage : MonoBehaviour
         ScoreBoard.SetActive(true);
     }
 
-    //±¸±Û½ÃÆ® - ·Î±× ¿¬µ¿ ÇÔ¼ö
+    //êµ¬ê¸€ì‹œíŠ¸ - ë¡œê·¸ ì—°ë™ í•¨ìˆ˜
     public void LogPost(string btn, string act)
+
     { 
+
         WWWForm form = new WWWForm();
         form.AddField("nickname", nickname);
         form.AddField("time", nowTime.ToString("yyyy/MM/dd HH:mm:ss:ff"));
@@ -147,7 +150,7 @@ public class GameManage : MonoBehaviour
     }
     IEnumerator Post(WWWForm form)
     {
-        using (UnityWebRequest www = UnityWebRequest.Post(WebURL, form)) // ¹İµå½Ã usingÀ» ½á¾ßÇÑ´Ù
+        using (UnityWebRequest www = UnityWebRequest.Post(WebURL, form)) // ë°˜ë“œì‹œ usingì„ ì¨ì•¼í•œë‹¤
         {
             yield return www.SendWebRequest();
         }
@@ -155,9 +158,10 @@ public class GameManage : MonoBehaviour
 
 
     /// <summary>
-    /// csv ·Î±×¸¦ ³²±â´Â ÇÔ¼ö
+    /// csv ë¡œê·¸ë¥¼ ë‚¨ê¸°ëŠ” í•¨ìˆ˜
     /// </summary>
-    /*void LogPost(string btn, string act)
+    void Logger(string btn, string act)
+
     {
 
         nowTime = DateTime.Now;
@@ -165,23 +169,24 @@ public class GameManage : MonoBehaviour
         {
             sw.WriteLine($"{nowTime.ToString("yyyy/MM/dd HH:mm:ss:ff")},{btn},{act},{life},{bossLife},{score},{exp},{totalexp},{attackDamage},{attackPercent},{attackDamageLevel},{attackPercentLevel}");
         }
-    }*/
+    }
     
     /// <summary>
-    /// °ø°İ ¹öÆ°À» Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    /// ê³µê²© ë²„íŠ¼ì„ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     /// </summary>
     public void OnClickAttack()
     {
-        //LogPost ("°ø°İ", "½ÇÇàÅ×½ºÆ®");
-        if (!isPlayerAlive)  //´Ù½ÃÇÏ±â
+        //LogPost ("ê³µê²©", "ì‹¤í–‰í…ŒìŠ¤íŠ¸");
+        if (!isPlayerAlive)  //ë‹¤ì‹œí•˜ê¸°
         {
-            LogPost("°ø°İ", "´Ù½ÃÇÏ±â");
+            LogPost("ê³µê²©", "ë‹¤ì‹œí•˜ê¸°");
+
                 
             GameReset();
         }
-        else if (UnityEngine.Random.Range(0, 100) <= iattackPercent)    //°ø°İ ¼º°ø
+        else if (UnityEngine.Random.Range(0, 100) <= iattackPercent)    //ê³µê²© ì„±ê³µ
         {
-            LogPost("°ø°İ", "¼º°ø");
+            LogPost("ê³µê²©", "ì„±ê³µ");
             
             isBossHit = true;
 
@@ -193,9 +198,9 @@ public class GameManage : MonoBehaviour
             attackCount++;
 
         }
-        else    //°ø°İ ½ÇÆĞ
+        else    //ê³µê²© ì‹¤íŒ¨
         {
-            LogPost("°ø°İ", "½ÇÆĞ");
+            LogPost("ê³µê²©", "ì‹¤íŒ¨");
             life--;
             attackPercent = 100;
             if(life <= 0)
@@ -205,20 +210,20 @@ public class GameManage : MonoBehaviour
         }
         if(bossLife <= 0)
         {
-            LogPost("°ø°İ", "°ÔÀÓ Å¬¸®¾î");
+            LogPost("ê³µê²©", "ê²Œì„ í´ë¦¬ì–´");
             GameClear();
         }
     }
 
     /// <summary>
-    /// °ø°İ·Â °­È­ ¹öÆ°À» Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    /// ê³µê²©ë ¥ ê°•í™” ë²„íŠ¼ì„ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     /// </summary>
     public void OnClickUpgradeDamage()
     {
-        if (exp >= attackDamageUpgradeCost) //°æÇèÄ¡ ÃæºĞ
+        if (exp >= attackDamageUpgradeCost) //ê²½í—˜ì¹˜ ì¶©ë¶„
         {
 
-            LogPost("°ø°İ·Â °­È­", "¼º°ø");
+            LogPost("ê³µê²©ë ¥ ê°•í™”", "ì„±ê³µ");
             attackDamage += attackDamageUpgradeValue;
             exp -= attackDamageUpgradeCost;
             attackDamageLevel++;
@@ -228,18 +233,18 @@ public class GameManage : MonoBehaviour
         }
         else
         {
-            LogPost("°ø°İ·Â °­È­", "½ÇÆĞ");
+            LogPost("ê³µê²©ë ¥ ê°•í™”", "ì‹¤íŒ¨");
         }
     }
 
     /// <summary>
-    /// Á¤È®µµ °­È­ ¹öÆ°À» Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    /// ì •í™•ë„ ê°•í™” ë²„íŠ¼ì„ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     /// </summary>
     public void OnClickUpgradePercent()
     {
-        if(exp >= attackPercentUpgradeCost) //°æÇèÄ¡ ÃæºĞ
+        if(exp >= attackPercentUpgradeCost) //ê²½í—˜ì¹˜ ì¶©ë¶„
         {
-            LogPost("Á¤È®µµ °­È­", "¼º°ø");
+            LogPost("ì •í™•ë„ ê°•í™”", "ì„±ê³µ");
             attackPercent += attackPercentUpgradeValue;
             exp -= attackPercentUpgradeCost;
             attackPercentLevel++;
@@ -249,16 +254,16 @@ public class GameManage : MonoBehaviour
         }
         else
         {
-            LogPost("Á¤È®µµ °­È­", "½ÇÆĞ");
+            LogPost("ì •í™•ë„ ê°•í™”", "ì‹¤íŒ¨");
         }
     }
 
     /// <summary>
-    /// °ÔÀÓ Á¾·á ¹öÆ°À» Å¬¸¯ ½Ã ½ÇÇàµÇ´Â ÇÔ¼ö
+    /// ê²Œì„ ì¢…ë£Œ ë²„íŠ¼ì„ í´ë¦­ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     /// </summary>
     public void OnClickExit()
     {
-        LogPost("Á¾·á", "°ÔÀÓ Á¾·á");
+        LogPost("ì¢…ë£Œ", "ê²Œì„ ì¢…ë£Œ");
         Debug.Log("Exit");
         Application.Quit();
     }
@@ -276,9 +281,9 @@ public class GameManage : MonoBehaviour
         nowTime = DateTime.Now;
         using (StreamWriter sw = new StreamWriter(filepath, true, System.Text.Encoding.GetEncoding("utf-8")))
         {
-            sw.WriteLine("½Ã°£,¹öÆ°,Çàµ¿,ÇÃ·¹ÀÌ¾î Ã¼·Â,º¸½º Ã¼·Â,Á¡¼ö,¼ÒÀ¯ °æÇèÄ¡,ÃÑ °æÇèÄ¡,°ø°İ·Â,°ø°İ ¼º°ø È®·ü,°ø°İ·Â °­È­ ·¹º§,Á¤È®µµ °­È­ ·¹º§");
+            sw.WriteLine("ì‹œê°„,ë²„íŠ¼,í–‰ë™,í”Œë ˆì´ì–´ ì²´ë ¥,ë³´ìŠ¤ ì²´ë ¥,ì ìˆ˜,ì†Œìœ  ê²½í—˜ì¹˜,ì´ ê²½í—˜ì¹˜,ê³µê²©ë ¥,ê³µê²© ì„±ê³µ í™•ë¥ ,ê³µê²©ë ¥ ê°•í™” ë ˆë²¨,ì •í™•ë„ ê°•í™” ë ˆë²¨");
         }
-        LogPost("°ÔÀÓ ½ÃÀÛ", "°ÔÀÓ ½ÃÀÛ");
+        LogPost("ê²Œì„ ì‹œì‘", "ê²Œì„ ì‹œì‘");
         GameReset();
     }
 
@@ -289,7 +294,7 @@ public class GameManage : MonoBehaviour
         Nickname_Input.SetActive(false);
         Nickname_Button.SetActive(false);
         Nickname_UI_Text.text = "ID : "+ nickname;
-        LogPost("´Ğ³×ÀÓ »ı¼º", "´Ğ³×ÀÓ »ı¼º");
+        LogPost("ë‹‰ë„¤ì„ ìƒì„±", "ë‹‰ë„¤ì„ ìƒì„±");
     }
 
 
@@ -309,7 +314,7 @@ public class GameManage : MonoBehaviour
 
             }
             HitEffect.SetActive(true);
-            RectTransform rectTransform = HitEffect.GetComponent<RectTransform>(); // HitEffectÀÇ RectTransform ÄÄÆ÷³ÍÆ® °¡Á®¿À±â
+            RectTransform rectTransform = HitEffect.GetComponent<RectTransform>(); // HitEffectì˜ RectTransform ì»´í¬ë„ŒíŠ¸ ê°€ì ¸ì˜¤ê¸°
             rectTransform.anchoredPosition = new Vector2(newX, newY);
 
             if (timer >= delayInSeconds)
@@ -328,51 +333,51 @@ public class GameManage : MonoBehaviour
         switch (life)
         {
             case 0:
-                LifeThird.enabled = false; // ¼¼ ¹øÂ° ÇÏÆ® ÀÌ¹ÌÁö ºñÈ°¼ºÈ­
+                LifeThird.enabled = false; // ì„¸ ë²ˆì§¸ í•˜íŠ¸ ì´ë¯¸ì§€ ë¹„í™œì„±í™”
                 break;
             case 1:
-                LifeThird.enabled = true; // ¼¼ ¹øÂ° ÇÏÆ® ÀÌ¹ÌÁö È°¼ºÈ­
-                LifeSecond.enabled = false; // µÎ ¹øÂ° ÇÏÆ® ÀÌ¹ÌÁö ºñÈ°¼ºÈ­
+                LifeThird.enabled = true; // ì„¸ ë²ˆì§¸ í•˜íŠ¸ ì´ë¯¸ì§€ í™œì„±í™”
+                LifeSecond.enabled = false; // ë‘ ë²ˆì§¸ í•˜íŠ¸ ì´ë¯¸ì§€ ë¹„í™œì„±í™”
                 break;
             case 2:
-                LifeThird.enabled = true; // ¼¼ ¹øÂ° ÇÏÆ® ÀÌ¹ÌÁö È°¼ºÈ­
-                LifeSecond.enabled = true; // µÎ ¹øÂ° ÇÏÆ® ÀÌ¹ÌÁö È°¼ºÈ­
-                LifeFirst.enabled = false; // Ã¹ ¹øÂ° ÇÏÆ® ÀÌ¹ÌÁö ºñÈ°¼ºÈ­
+                LifeThird.enabled = true; // ì„¸ ë²ˆì§¸ í•˜íŠ¸ ì´ë¯¸ì§€ í™œì„±í™”
+                LifeSecond.enabled = true; // ë‘ ë²ˆì§¸ í•˜íŠ¸ ì´ë¯¸ì§€ í™œì„±í™”
+                LifeFirst.enabled = false; // ì²« ë²ˆì§¸ í•˜íŠ¸ ì´ë¯¸ì§€ ë¹„í™œì„±í™”
                 break;
             case 3:
-                LifeThird.enabled = true; // ¼¼ ¹øÂ° ÇÏÆ® ÀÌ¹ÌÁö È°¼ºÈ­
-                LifeSecond.enabled = true; // µÎ ¹øÂ° ÇÏÆ® ÀÌ¹ÌÁö È°¼ºÈ­
-                LifeFirst.enabled = true; // Ã¹ ¹øÂ° ÇÏÆ® ÀÌ¹ÌÁö È°¼ºÈ­
+                LifeThird.enabled = true; // ì„¸ ë²ˆì§¸ í•˜íŠ¸ ì´ë¯¸ì§€ í™œì„±í™”
+                LifeSecond.enabled = true; // ë‘ ë²ˆì§¸ í•˜íŠ¸ ì´ë¯¸ì§€ í™œì„±í™”
+                LifeFirst.enabled = true; // ì²« ë²ˆì§¸ í•˜íŠ¸ ì´ë¯¸ì§€ í™œì„±í™”
                 break;
         }
 
         
 
 
-        //double °ø°İ È®·üÀ» int·Î º¯È¯ÇØ ÀúÀå
+        //double ê³µê²© í™•ë¥ ì„ intë¡œ ë³€í™˜í•´ ì €ì¥
         iattackPercent = Convert.ToInt32(attackPercent);
 
-        //UI¿¡ ³ªÅ¸³¾ ÅØ½ºÆ®
-        ExpText.text = "°æÇèÄ¡: " + exp.ToString();
+        //UIì— ë‚˜íƒ€ë‚¼ í…ìŠ¤íŠ¸
+        ExpText.text = "ê²½í—˜ì¹˜: " + exp.ToString();
         BossLifeText.text = bossLife.ToString() + " / 300";
-        AttackCountText.text = "°ø°İ¼º°øÈ½¼ö:" + attackCount.ToString() + "¹ø";
+        AttackCountText.text = "ê³µê²©ì„±ê³µíšŸìˆ˜:" + attackCount.ToString() + "ë²ˆ";
 
         if(life <=0)
         {
             isPlayerAlive = false;
-            AttackButtonText.text = "´Ù½Ã ½ÃÀÛ";
+            AttackButtonText.text = "ë‹¤ì‹œ ì‹œì‘";
         }
         else
         {
             isPlayerAlive = true;
-            AttackButtonText.text = "¡Ù°ø°İ¡Ù";
+            AttackButtonText.text = "â˜†ê³µê²©â˜†";
         }
         
 
-        UpgradeDamageButtonText.text = "°ø°İ·Â °­È­!\n" + attackDamageUpgradeCost.ToString() + "exp\nLV." + attackDamageLevel.ToString()+"\n"+ attackDamageUpgradeValue.ToString()+"Áõ°¡";
-        UpgradePercentButtonText.text = "Á¤È®µµ °­È­!\n" + attackPercentUpgradeCost.ToString() + "exp\nLV."+ attackPercentLevel.ToString() + "\n" + attackPercentUpgradeValue.ToString() + "%Áõ°¡"; ;
+        UpgradeDamageButtonText.text = "ê³µê²©ë ¥ ê°•í™”!\n" + attackDamageUpgradeCost.ToString() + "exp\nLV." + attackDamageLevel.ToString()+"\n"+ attackDamageUpgradeValue.ToString()+"ì¦ê°€";
+        UpgradePercentButtonText.text = "ì •í™•ë„ ê°•í™”!\n" + attackPercentUpgradeCost.ToString() + "exp\nLV."+ attackPercentLevel.ToString() + "\n" + attackPercentUpgradeValue.ToString() + "%ì¦ê°€"; ;
 
-        ScoreBoardText.text = $"\n\n¡Ù{scoreboardsay}¡Ù\n\n\nSCORE : {score}\n\nTOTAL DAMAGE : {300 - bossLife}\n\nATTACK COUNT : {attackCount}";
+        ScoreBoardText.text = $"\n\nâ˜†{scoreboardsay}â˜†\n\n\nSCORE : {score}\n\nTOTAL DAMAGE : {300 - bossLife}\n\nATTACK COUNT : {attackCount}";
         DamageText.text = ": "+attackDamage.ToString();
         PercentText.text = ": "+iattackPercent.ToString() + "%";
         HitDamegeNumber.text = "-"+ attackDamage.ToString();
