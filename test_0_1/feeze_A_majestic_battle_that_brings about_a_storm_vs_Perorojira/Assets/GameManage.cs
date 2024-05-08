@@ -279,10 +279,10 @@ public class GameManage : MonoBehaviour
         HitEffect.SetActive(false);
         filepath = "PlayLog\\Log_" + nowTime.ToString("yyyy_MM_dd_HH_mm_ss_ff") + ".csv";
         nowTime = DateTime.Now;
-        using (StreamWriter sw = new StreamWriter(filepath, true, System.Text.Encoding.GetEncoding("utf-8")))
+        /*using (StreamWriter sw = new StreamWriter(filepath, true, System.Text.Encoding.GetEncoding("utf-8")))
         {
             sw.WriteLine("시간,버튼,행동,플레이어 체력,보스 체력,점수,소유 경험치,총 경험치,공격력,공격 성공 확률,공격력 강화 레벨,정확도 강화 레벨");
-        }
+        }*/
         LogPost("게임 시작", "게임 시작");
         GameReset();
     }
@@ -294,7 +294,9 @@ public class GameManage : MonoBehaviour
         Nickname_Input.SetActive(false);
         Nickname_Button.SetActive(false);
         Nickname_UI_Text.text = "ID : "+ nickname;
+        GameReset();
         LogPost("닉네임 생성", "닉네임 생성");
+
     }
 
 
