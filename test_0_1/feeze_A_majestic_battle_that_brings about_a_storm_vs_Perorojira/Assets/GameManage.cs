@@ -5,14 +5,13 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Networking;
 
 public class GameManage : MonoBehaviour
 {
     
     float timer = 0f;
     float delayInSeconds = 0.1f;
-    float ShowDamageTimer = 0.3f;
-    
 
     //계수
     /// <summary> 공격 성공 확률 감소 계수 (곱연산) </summary>
@@ -66,9 +65,11 @@ public class GameManage : MonoBehaviour
     /// <summary> 플레이어 체력이 1 이상일때 true </summary>
     bool isPlayerAlive = true;
 
-    public GameObject ScoreBoard, BossImage, HitEffect;
+
+    
+    public GameObject ScoreBoard, BossImage, HitEffect, Null_Image, Nickname_Input, Nickname_Button;
     public RawImage LifeFirst, LifeSecond, LifeThird;
-    public Text ExpText, AttackCountText, BossLifeText, AttackButtonText,  UpgradePercentButtonText, UpgradeDamageButtonText, ScoreBoardText, DamageText, PercentText, HitDamegeNumber;    //화면에 보이는 UI를 수정할 수 있게 연결함
+    public Text ExpText, AttackCountText, BossLifeText, AttackButtonText,  UpgradePercentButtonText, UpgradeDamageButtonText, ScoreBoardText, DamageText, PercentText, HitDamegeNumber, Nickname_Input_Text, Nickname_UI_Text;    //화면에 보이는 UI를 수정할 수 있게 연결함
     
     static DateTime nowTime = DateTime.Now;
     string filepath = "";
@@ -78,9 +79,13 @@ public class GameManage : MonoBehaviour
     bool isHitEfectOn = false;
 
     float newX = 0;
-    float newY = 0; 
-  
+    float newY = 0;
 
+    ///웹 배포 URL
+    const string WebURL = "https://script.google.com/macros/s/AKfycbzMZTQQbQ6pZY0uwDmgohLvMmC1XnO7POrWzFG9vWQEEJJY3AOCKoxHvKRQUICcqro0/exec";
+    //닉네임
+    string nickname;
+    int lognum;
 
     /// <summary>
     /// 게임을 초기화 하는 함수
@@ -109,7 +114,6 @@ public class GameManage : MonoBehaviour
         scoreboardsay = "ERROR";
         score = 0;
     }
-
     void GameClear()
     {
         score = score + 3000;
@@ -122,37 +126,64 @@ public class GameManage : MonoBehaviour
         ScoreBoard.SetActive(true);
     }
 
-
-
-    // 추가된 함수: 로그를 남기는 함수
-    void Logger(string btn, string act)
+    //구글시트 - 로그 연동 함수
+    public void LogPost(string btn, string act)
+    { 
+        WWWForm form = new WWWForm();
+        form.AddField("nickname", nickname);
+        form.AddField("time", nowTime.ToString("yyyy/MM/dd HH:mm:ss:ff"));
+        form.AddField("button", btn);
+        form.AddField("act", act);
+        form.AddField("playerHp", life);
+        form.AddField("bossHp", bossLife);
+        form.AddField("score", score);
+        form.AddField("nowExp", exp);
+        form.AddField("totalExp", totalexp);
+        form.AddField("attackDamage", attackDamage);
+        form.AddField("attackPercent", attackPercent.ToString());
+        form.AddField("attackDamageLevel", attackDamageLevel);
+        form.AddField("attackPercentLevel", attackPercentLevel);
+        StartCoroutine(Post(form));
+    }
+    IEnumerator Post(WWWForm form)
     {
+        using (UnityWebRequest www = UnityWebRequest.Post(WebURL, form)) // 반드시 using을 써야한다
+        {
+            yield return www.SendWebRequest();
+        }
+    }
+
+
+    /// <summary>
+    /// csv 로그를 남기는 함수
+    /// </summary>
+    /*void LogPost(string btn, string act)
+    {
+
         nowTime = DateTime.Now;
         using (StreamWriter sw = new StreamWriter(filepath, true, System.Text.Encoding.GetEncoding("utf-8")))
         {
             sw.WriteLine($"{nowTime.ToString("yyyy/MM/dd HH:mm:ss:ff")},{btn},{act},{life},{bossLife},{score},{exp},{totalexp},{attackDamage},{attackPercent},{attackDamageLevel},{attackPercentLevel}");
         }
-    }
+    }*/
     
     /// <summary>
     /// 공격 버튼을 클릭 시 실행되는 함수
     /// </summary>
     public void OnClickAttack()
     {
+        //LogPost ("공격", "실행테스트");
         if (!isPlayerAlive)  //다시하기
         {
-           
-
-            Logger("공격", "다시하기");
+            LogPost("공격", "다시하기");
                 
             GameReset();
         }
         else if (UnityEngine.Random.Range(0, 100) <= iattackPercent)    //공격 성공
         {
-            Logger("공격", "성공");
+            LogPost("공격", "성공");
             
             isBossHit = true;
-            
 
             bossLife -= attackDamage;
             score = attackDamage + exp; 
@@ -160,14 +191,11 @@ public class GameManage : MonoBehaviour
             exp += 30;
             totalexp += 30;
             attackCount++;
-            
-
-
 
         }
         else    //공격 실패
         {
-            Logger("공격", "실패");
+            LogPost("공격", "실패");
             life--;
             attackPercent = 100;
             if(life <= 0)
@@ -177,7 +205,7 @@ public class GameManage : MonoBehaviour
         }
         if(bossLife <= 0)
         {
-            Logger("공격", "게임 클리어");
+            LogPost("공격", "게임 클리어");
             GameClear();
         }
     }
@@ -190,7 +218,7 @@ public class GameManage : MonoBehaviour
         if (exp >= attackDamageUpgradeCost) //경험치 충분
         {
 
-            Logger("공격력 강화", "성공");
+            LogPost("공격력 강화", "성공");
             attackDamage += attackDamageUpgradeValue;
             exp -= attackDamageUpgradeCost;
             attackDamageLevel++;
@@ -200,7 +228,7 @@ public class GameManage : MonoBehaviour
         }
         else
         {
-            Logger("공격력 강화", "실패");
+            LogPost("공격력 강화", "실패");
         }
     }
 
@@ -211,7 +239,7 @@ public class GameManage : MonoBehaviour
     {
         if(exp >= attackPercentUpgradeCost) //경험치 충분
         {
-            Logger("정확도 강화", "성공");
+            LogPost("정확도 강화", "성공");
             attackPercent += attackPercentUpgradeValue;
             exp -= attackPercentUpgradeCost;
             attackPercentLevel++;
@@ -221,20 +249,16 @@ public class GameManage : MonoBehaviour
         }
         else
         {
-            Logger("정확도 강화", "실패");
+            LogPost("정확도 강화", "실패");
         }
     }
-
-
-    
-
 
     /// <summary>
     /// 게임 종료 버튼을 클릭 시 실행되는 함수
     /// </summary>
     public void OnClickExit()
     {
-        Logger("종료", "게임 종료");
+        LogPost("종료", "게임 종료");
         Debug.Log("Exit");
         Application.Quit();
     }
@@ -242,6 +266,11 @@ public class GameManage : MonoBehaviour
 
     public void Start()
     {
+        nickname = Nickname_Input_Text.text;
+        Null_Image.SetActive(true);
+        Nickname_Input.SetActive(true);
+        Nickname_Button.SetActive(true);
+
         HitEffect.SetActive(false);
         filepath = "PlayLog\\Log_" + nowTime.ToString("yyyy_MM_dd_HH_mm_ss_ff") + ".csv";
         nowTime = DateTime.Now;
@@ -249,11 +278,20 @@ public class GameManage : MonoBehaviour
         {
             sw.WriteLine("시간,버튼,행동,플레이어 체력,보스 체력,점수,소유 경험치,총 경험치,공격력,공격 성공 확률,공격력 강화 레벨,정확도 강화 레벨");
         }
-        Logger("게임 시작", "게임 시작");
+        LogPost("게임 시작", "게임 시작");
         GameReset();
     }
 
-    
+    public void OnButtonNickname_Button()
+    {
+        nickname = Nickname_Input_Text.text;
+        Null_Image.SetActive(false);
+        Nickname_Input.SetActive(false);
+        Nickname_Button.SetActive(false);
+        Nickname_UI_Text.text = "ID : "+ nickname;
+        LogPost("닉네임 생성", "닉네임 생성");
+    }
+
 
     void Update()
     {
