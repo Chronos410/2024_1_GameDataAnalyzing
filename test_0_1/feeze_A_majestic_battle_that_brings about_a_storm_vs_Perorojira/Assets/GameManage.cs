@@ -9,7 +9,7 @@ using UnityEngine.Networking;
 
 public class GameManage : MonoBehaviour
 {
-    
+
     float timer = 0f;
     float delayInSeconds = 0.1f;
 
@@ -27,7 +27,7 @@ public class GameManage : MonoBehaviour
 
     /// <summary> 보스 체력 </summary>
     int bossLife = 0;
-  
+
     /// <summary> 공격력 </summary>
     int attackDamage = 0;
     /// <summary> 공격 성공 확률 </summary>
@@ -66,11 +66,11 @@ public class GameManage : MonoBehaviour
     bool isPlayerAlive = true;
 
 
-    
+
     public GameObject ScoreBoard, BossImage, HitEffect, Null_Image, Nickname_Input, Nickname_Button;
     public RawImage LifeFirst, LifeSecond, LifeThird;
-    public Text ExpText, AttackCountText, BossLifeText, AttackButtonText,  UpgradePercentButtonText, UpgradeDamageButtonText, ScoreBoardText, DamageText, PercentText, HitDamegeNumber, Nickname_Input_Text, Nickname_UI_Text;    //화면에 보이는 UI를 수정할 수 있게 연결함
-    
+    public Text ExpText, AttackCountText, BossLifeText, AttackButtonText, UpgradePercentButtonText, UpgradeDamageButtonText, ScoreBoardText, DamageText, PercentText, HitDamegeNumber, Nickname_Input_Text, Nickname_UI_Text;    //화면에 보이는 UI를 수정할 수 있게 연결함
+
     static DateTime nowTime = DateTime.Now;
     string filepath = "";
     string scoreboardsay = "";
@@ -93,7 +93,7 @@ public class GameManage : MonoBehaviour
     /// </summary>
     void GameReset()
     {
-        
+
         life = 3;
         bossLife = 300;
         exp = 0;
@@ -130,8 +130,8 @@ public class GameManage : MonoBehaviour
     //구글시트 - 로그 연동 함수
     public void LogPost(string btn, string act)
 
-    { 
-
+    {
+        nowTime = DateTime.Now;
         WWWForm form = new WWWForm();
         form.AddField("nickname", nickname);
         form.AddField("time", nowTime.ToString("yyyy/MM/dd HH:mm:ss:ff"));
@@ -161,10 +161,7 @@ public class GameManage : MonoBehaviour
     /// csv 로그를 남기는 함수
     /// </summary>
     void Logger(string btn, string act)
-
     {
-
-        nowTime = DateTime.Now;
         using (StreamWriter sw = new StreamWriter(filepath, true, System.Text.Encoding.GetEncoding("utf-8")))
         {
             sw.WriteLine($"{nowTime.ToString("yyyy/MM/dd HH:mm:ss:ff")},{btn},{act},{life},{bossLife},{score},{exp},{totalexp},{attackDamage},{attackPercent},{attackDamageLevel},{attackPercentLevel}");
@@ -177,33 +174,29 @@ public class GameManage : MonoBehaviour
     public void OnClickAttack()
     {
         //LogPost ("공격", "실행테스트");
-        if (!isPlayerAlive)  //다시하기
+        if (!isPlayerAlive)  //플레이어 체력 0 이하면 다시하기
         {
             LogPost("공격", "다시하기");
-
-                
             GameReset();
         }
         else if (UnityEngine.Random.Range(0, 100) <= iattackPercent)    //공격 성공
         {
-            LogPost("공격", "성공");
-            
             isBossHit = true;
-
             bossLife -= attackDamage;
             score = attackDamage + exp; 
             attackPercent *= attackPercentChange;
             exp += 30;
             totalexp += 30;
             attackCount++;
-
+            LogPost("공격", "성공");
         }
         else    //공격 실패
         {
-            LogPost("공격", "실패");
+            
             life--;
             attackPercent = 100;
-            if(life <= 0)
+            LogPost("공격", "실패");
+            if (life <= 0)
             {
                 GameOver();
             }
@@ -223,13 +216,13 @@ public class GameManage : MonoBehaviour
         if (exp >= attackDamageUpgradeCost) //경험치 충분
         {
 
-            LogPost("공격력 강화", "성공");
+            
             attackDamage += attackDamageUpgradeValue;
             exp -= attackDamageUpgradeCost;
             attackDamageLevel++;
-
             attackDamageUpgradeCost = attackDamageUpgradeCost + 5 * attackDamageLevel;
             attackDamageUpgradeValue = 4 + attackDamageLevel;
+            LogPost("공격력 강화", "성공");
         }
         else
         {
@@ -244,13 +237,12 @@ public class GameManage : MonoBehaviour
     {
         if(exp >= attackPercentUpgradeCost) //경험치 충분
         {
-            LogPost("정확도 강화", "성공");
             attackPercent += attackPercentUpgradeValue;
             exp -= attackPercentUpgradeCost;
             attackPercentLevel++;
-
             attackPercentUpgradeCost = attackPercentUpgradeCost + 4 * attackPercentLevel;
             attackPercentUpgradeValue = 4 + attackPercentLevel;
+            LogPost("정확도 강화", "성공");
         }
         else
         {
@@ -277,8 +269,8 @@ public class GameManage : MonoBehaviour
         Nickname_Button.SetActive(true);
 
         HitEffect.SetActive(false);
-        filepath = "PlayLog\\Log_" + nowTime.ToString("yyyy_MM_dd_HH_mm_ss_ff") + ".csv";
         nowTime = DateTime.Now;
+        //filepath = "PlayLog\\Log_" + nowTime.ToString("yyyy_MM_dd_HH_mm_ss_ff") + ".csv";
         /*using (StreamWriter sw = new StreamWriter(filepath, true, System.Text.Encoding.GetEncoding("utf-8")))
         {
             sw.WriteLine("시간,버튼,행동,플레이어 체력,보스 체력,점수,소유 경험치,총 경험치,공격력,공격 성공 확률,공격력 강화 레벨,정확도 강화 레벨");
@@ -296,18 +288,16 @@ public class GameManage : MonoBehaviour
         Nickname_UI_Text.text = "ID : "+ nickname;
         GameReset();
         LogPost("닉네임 생성", "닉네임 생성");
-
     }
 
 
     void Update()
     {
-
-
         if (isBossHit)
         {
             timer += Time.deltaTime;
             BossImage.SetActive(false);
+
             if (isHitEfectOn)
             {
                 newX = UnityEngine.Random.Range(-300f, 450f);
@@ -315,6 +305,7 @@ public class GameManage : MonoBehaviour
                 isHitEfectOn = false;
 
             }
+
             HitEffect.SetActive(true);
             RectTransform rectTransform = HitEffect.GetComponent<RectTransform>(); // HitEffect의 RectTransform 컴포넌트 가져오기
             rectTransform.anchoredPosition = new Vector2(newX, newY);
@@ -330,16 +321,17 @@ public class GameManage : MonoBehaviour
             }
         }
 
-
-
         switch (life)
         {
             case 0:
                 LifeThird.enabled = false; // 세 번째 하트 이미지 비활성화
+                LifeSecond.enabled = false; // 두 번째 하트 이미지 비활성화
+                LifeFirst.enabled = false; // 첫 번째 하트 이미지 비활성화
                 break;
             case 1:
                 LifeThird.enabled = true; // 세 번째 하트 이미지 활성화
                 LifeSecond.enabled = false; // 두 번째 하트 이미지 비활성화
+                LifeFirst.enabled = false; // 첫 번째 하트 이미지 비활성화
                 break;
             case 2:
                 LifeThird.enabled = true; // 세 번째 하트 이미지 활성화
@@ -352,9 +344,6 @@ public class GameManage : MonoBehaviour
                 LifeFirst.enabled = true; // 첫 번째 하트 이미지 활성화
                 break;
         }
-
-        
-
 
         //double 공격 확률을 int로 변환해 저장
         iattackPercent = Convert.ToInt32(attackPercent);
@@ -374,7 +363,6 @@ public class GameManage : MonoBehaviour
             isPlayerAlive = true;
             AttackButtonText.text = "☆공격☆";
         }
-        
 
         UpgradeDamageButtonText.text = "공격력 강화!\n" + attackDamageUpgradeCost.ToString() + "exp\nLV." + attackDamageLevel.ToString()+"\n"+ attackDamageUpgradeValue.ToString()+"증가";
         UpgradePercentButtonText.text = "정확도 강화!\n" + attackPercentUpgradeCost.ToString() + "exp\nLV."+ attackPercentLevel.ToString() + "\n" + attackPercentUpgradeValue.ToString() + "%증가"; ;
@@ -383,6 +371,5 @@ public class GameManage : MonoBehaviour
         DamageText.text = ": "+attackDamage.ToString();
         PercentText.text = ": "+iattackPercent.ToString() + "%";
         HitDamegeNumber.text = "-"+ attackDamage.ToString();
-
     }
 }
