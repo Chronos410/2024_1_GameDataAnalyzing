@@ -67,9 +67,9 @@ public class GameManage : MonoBehaviour
 
 
     
-    public GameObject ScoreBoard, BossImage, HitEffect, Null_Image, Nickname_Input, Nickname_Button;
+    public GameObject ScoreBoard, BossImage, HitEffect, Null_Image, Nickname_Input, Nickname_Button, Attack_Button;
     public RawImage LifeFirst, LifeSecond, LifeThird;
-    public Text ExpText, AttackCountText, BossLifeText, AttackButtonText,  UpgradePercentButtonText, UpgradeDamageButtonText, ScoreBoardText, DamageText, PercentText, HitDamegeNumber, Nickname_Input_Text, Nickname_UI_Text;    //화면에 보이는 UI를 수정할 수 있게 연결함
+    public Text ExpText, AttackCountText, BossLifeText,  UpgradePercentButtonText, UpgradeDamageButtonText, ScoreBoardText, DamageText, PercentText, HitDamegeNumber, Nickname_Input_Text, Nickname_UI_Text;    //화면에 보이는 UI를 수정할 수 있게 연결함
     
     static DateTime nowTime = DateTime.Now;
     string filepath = "";
@@ -170,7 +170,16 @@ public class GameManage : MonoBehaviour
             sw.WriteLine($"{nowTime.ToString("yyyy/MM/dd HH:mm:ss:ff")},{btn},{act},{life},{bossLife},{score},{exp},{totalexp},{attackDamage},{attackPercent},{attackDamageLevel},{attackPercentLevel}");
         }
     }
-    
+
+
+
+    public void OnClickReStart()
+    {
+        LogPost("공격", "다시하기");
+
+
+        GameReset();
+    }
     /// <summary>
     /// 공격 버튼을 클릭 시 실행되는 함수
     /// </summary>
@@ -179,10 +188,10 @@ public class GameManage : MonoBehaviour
         //LogPost ("공격", "실행테스트");
         if (!isPlayerAlive)  //다시하기
         {
-            LogPost("공격", "다시하기");
+            //LogPost("공격", "다시하기");
 
                 
-            GameReset();
+            //GameReset();
         }
         else if (UnityEngine.Random.Range(0, 100) <= iattackPercent)    //공격 성공
         {
@@ -210,6 +219,7 @@ public class GameManage : MonoBehaviour
         }
         if(bossLife <= 0)
         {
+
             LogPost("공격", "게임 클리어");
             GameClear();
         }
@@ -271,8 +281,9 @@ public class GameManage : MonoBehaviour
 
     public void Start()
     {
-        nickname = Nickname_Input_Text.text;
+        //Attack_Button.SetActive(true);
         Null_Image.SetActive(true);
+        nickname = Nickname_Input_Text.text;
         Nickname_Input.SetActive(true);
         Nickname_Button.SetActive(true);
 
@@ -348,6 +359,7 @@ public class GameManage : MonoBehaviour
                 LifeThird.enabled = true; // 세 번째 하트 이미지 활성화
                 LifeSecond.enabled = true; // 두 번째 하트 이미지 활성화
                 LifeFirst.enabled = true; // 첫 번째 하트 이미지 활성화
+                //Attack_Button.SetActive(false);
                 break;
         }
 
@@ -365,12 +377,12 @@ public class GameManage : MonoBehaviour
         if(life <=0)
         {
             isPlayerAlive = false;
-            AttackButtonText.text = "다시 시작";
+            //AttackButtonText.text = "다시 시작";
         }
         else
         {
             isPlayerAlive = true;
-            AttackButtonText.text = "☆공격☆";
+            //AttackButtonText.text = "☆공격☆";
         }
         
 
