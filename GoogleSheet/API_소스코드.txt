@@ -1,0 +1,15 @@
+var sheetID = SpreadsheetApp.openById("1EYBLzz9qomdnafQm541IPiGL8FOoBjmfniTfT4nXBY0");
+var sheet = sheetID.getSheets()[0];
+var p;
+
+function doPost(e) 
+{
+  p = e.parameter;
+
+  doPostLog();
+}
+
+function doPostLog()
+{
+  sheet.appendRow([p.nickname, p.time, p.button, p.act, p.playerHp, p.bossHp, p.score, p.nowExp, p.totalExp, p.attackDamage, p.attackPercent, p.attackDamageLevel, p.attackPercentLevel]);
+}
